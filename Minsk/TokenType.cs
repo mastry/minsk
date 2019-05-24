@@ -13,6 +13,9 @@ namespace Minsk
         LeftParens,
         RightParens,
         BadToken,
-        EOF
+        EOF,
+        Identifier,
+        Integer,
+        Double
     }
 }

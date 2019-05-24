@@ -5,7 +5,7 @@ namespace Minsk
     public class Lexer
     {
         readonly string _text;
-        int _position;
+        int _position = 0;
 
         public Lexer(string text) => _text = text;
 
@@ -13,50 +13,89 @@ namespace Minsk
 
         private void Next() => _position++;
 
-        public SyntaxToken NextToken()
+        public Token NextToken()
         {
             if (_position >= _text.Length)
-                return new SyntaxToken(TokenType.EOF, _position, "\0", null);
+                return new Token(TokenType.EOF, _position, "\0", null);
 
-            if (char.IsDigit(Current))
+            var token = Current switch
             {
-                var start = _position;
+                _ when char.IsLetter(Current) || Current == '_' => Identifier(),
+                _ when char.IsDigit(Current) => Number(),
+                _ when char.IsWhiteSpace(Current) => Whitespace(),
+                '+' => CharToken(TokenType.Plus),
+                '-' => CharToken(TokenType.Minus),
+                '*' => CharToken(TokenType.Star),
+                '/' => CharToken(TokenType.Slash),
+                '(' => CharToken(TokenType.LeftParens),
+                ')' => CharToken(TokenType.RightParens),
+                _ => CharToken(TokenType.BadToken)
+            };
 
-                while (char.IsDigit(Current))
-                    Next();
+            return token;
+        }
 
-                var length = _position - start;
-                var text = _text.Substring(start, length);
-                int.TryParse(text, out var value);
-                return new SyntaxToken(TokenType.Number, start, text, value);
+        private Token CharToken(TokenType tokenType)
+        {
+            var token = new Token(tokenType, _position, $"{Current}", null);
+            _position++;
+            return token;
+        }
+
+        private Token Whitespace()
+        {
+            var start = _position;
+
+            while (char.IsWhiteSpace(Current))
+                Next();
+
+            var length = _position - start;
+            var text = _text.Substring(start, length);
+            return new Token(TokenType.Whitespace, start, text, null);
+        }
+
+        private Token Number()
+        {
+            var start = _position;
+
+            while (IsNumberChar(Current))
+                Next();
+
+            var length = _position - start;
+            var text = _text
+                .Substring(start, length)
+                .Replace("_", "");
+
+            if( int.TryParse(text, out var intValue) )
+            {
+                return new Token(TokenType.Integer, start, text, intValue);
+            }
+            else if( double.TryParse(text, out var doubleVal) )
+            {
+                return new Token(TokenType.Double, start, text, doubleVal);
+            }
+            else
+            {
+                return new Token(TokenType.BadToken, start, text, null);
             }
 
-            else if (char.IsWhiteSpace(Current))
+            static bool IsNumberChar(char c)
             {
-                var start = _position;
-
-                while (char.IsWhiteSpace(Current))
-                    Next();
-
-                var length = _position - start;
-                var text = _text.Substring(start, length);
-                return new SyntaxToken(TokenType.Whitespace, start, text, null);
+                return c != '\0' &&
+                    (char.IsDigit(c) || c == '_' || c == '.');
             }
+        }
 
-            else if (Current == '+')
-                return new SyntaxToken(TokenType.Plus, _position++, "+", null);
-            else if (Current == '-')
-                return new SyntaxToken(TokenType.Minus, _position++, "-", null);
-            else if (Current == '*')
-                return new SyntaxToken(TokenType.Star, _position++, "*", null);
-            else if (Current == '/')
-                return new SyntaxToken(TokenType.Slash, _position++, "/", null);
-            else if (Current == '(')
-                return new SyntaxToken(TokenType.LeftParens, _position++, "(", null);
-            else if (Current == ')')
-                return new SyntaxToken(TokenType.RightParens, _position++, ")", null);
+        private Token Identifier()
+        {
+            var start = _position;
 
-            return new SyntaxToken(TokenType.BadToken, _position++, _text.Substring(_position - 1, 1), null);
+            while (char.IsLetterOrDigit(Current) || Current == '_')
+                Next();
+
+            var length = _position - start;
+            var text = _text.Substring(start, length);
+            return new Token(TokenType.Identifier, start, text, null);
         }
     }
 }

@@ -2,9 +2,9 @@ using System;
 
 namespace Minsk
 {
-    public class SyntaxToken
+    public class Token
     {
-        public SyntaxToken(TokenType type, int position, string text, object value)
+        public Token(TokenType type, int position, string text, object? value)
         {
             TokenType = type;
             Position = position;
@@ -15,7 +15,7 @@ namespace Minsk
         public TokenType TokenType { get; }
         public int Position { get; }
         public string Text { get; }
-        public object Value { get; }
+        public object? Value { get; }
 
         public override string ToString()
         {
