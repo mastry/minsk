@@ -15,7 +15,7 @@ namespace Minsk.Tests
             var token = lexer.NextToken();
             Assert.True(token.Value != null);
             Assert.Equal(123, (token.Value));
-            Assert.Equal(TokenType.Integer, token.TokenType);
+            Assert.Equal(TokenType.Integer, token.Kind);
         }
 
         [Fact]
@@ -26,7 +26,7 @@ namespace Minsk.Tests
             var token = lexer.NextToken();
             Assert.True(token.Value != null);
             Assert.Equal(1234569, (token.Value));
-            Assert.Equal(TokenType.Integer, token.TokenType);
+            Assert.Equal(TokenType.Integer, token.Kind);
         }
 
         [Fact]
@@ -37,7 +37,7 @@ namespace Minsk.Tests
             var token = lexer.NextToken();
             Assert.True(token.Value != null);
             Assert.Equal(123.01, (token.Value));
-            Assert.Equal(TokenType.Double, token.TokenType);
+            Assert.Equal(TokenType.Double, token.Kind);
         }
 
         [Fact]
@@ -48,7 +48,7 @@ namespace Minsk.Tests
             var token = lexer.NextToken();
             Assert.True(token.Value != null);
             Assert.Equal(123220.012344122, (token.Value));
-            Assert.Equal(TokenType.Double, token.TokenType);
+            Assert.Equal(TokenType.Double, token.Kind);
         }
 
         [Fact]
@@ -57,12 +57,12 @@ namespace Minsk.Tests
             const string input = " test  ";
             var lexer = new Lexer(input);
             var token = lexer.NextToken();
-            Assert.True(token.TokenType == TokenType.Whitespace);
+            Assert.True(token.Kind == TokenType.Whitespace);
             Assert.Equal(" ", token.Text);
             token = lexer.NextToken();
-            Assert.True(token.TokenType == TokenType.Identifier);
+            Assert.True(token.Kind == TokenType.Identifier);
             token = lexer.NextToken();
-            Assert.True(token.TokenType == TokenType.Whitespace);
+            Assert.True(token.Kind == TokenType.Whitespace);
             Assert.Equal("  ", token.Text);
         }
 
@@ -72,7 +72,7 @@ namespace Minsk.Tests
             const string input = "someWord";
             var lexer = new Lexer(input);
             var token = lexer.NextToken();
-            Assert.True(token.TokenType == TokenType.Identifier);
+            Assert.True(token.Kind == TokenType.Identifier);
             Assert.Equal(input, token.Text);
         }
 
@@ -82,7 +82,7 @@ namespace Minsk.Tests
             const string input = "_some_word";
             var lexer = new Lexer(input);
             var token = lexer.NextToken();
-            Assert.True(token.TokenType == TokenType.Identifier);
+            Assert.True(token.Kind == TokenType.Identifier);
             Assert.Equal(input, token.Text);
         }
 
@@ -92,7 +92,7 @@ namespace Minsk.Tests
             const string input = "_some1_word12";
             var lexer = new Lexer(input);
             var token = lexer.NextToken();
-            Assert.True(token.TokenType == TokenType.Identifier);
+            Assert.True(token.Kind == TokenType.Identifier);
             Assert.Equal(input, token.Text);
         }
 
@@ -102,7 +102,7 @@ namespace Minsk.Tests
             const string input = "+";
             var lexer = new Lexer(input);
             var token = lexer.NextToken();
-            Assert.True(token.TokenType == TokenType.Plus);
+            Assert.True(token.Kind == TokenType.Plus);
             Assert.Equal(input, token.Text);
         }
 
@@ -112,7 +112,7 @@ namespace Minsk.Tests
             const string input = "-";
             var lexer = new Lexer(input);
             var token = lexer.NextToken();
-            Assert.True(token.TokenType == TokenType.Minus);
+            Assert.True(token.Kind == TokenType.Minus);
             Assert.Equal(input, token.Text);
         }
 
@@ -122,7 +122,7 @@ namespace Minsk.Tests
             const string input = "*";
             var lexer = new Lexer(input);
             var token = lexer.NextToken();
-            Assert.True(token.TokenType == TokenType.Star);
+            Assert.True(token.Kind == TokenType.Star);
             Assert.Equal(input, token.Text);
         }
 
@@ -132,7 +132,7 @@ namespace Minsk.Tests
             const string input = "/";
             var lexer = new Lexer(input);
             var token = lexer.NextToken();
-            Assert.True(token.TokenType == TokenType.Slash);
+            Assert.True(token.Kind == TokenType.Slash);
             Assert.Equal(input, token.Text);
         }
 
@@ -142,7 +142,7 @@ namespace Minsk.Tests
             const string input = "(";
             var lexer = new Lexer(input);
             var token = lexer.NextToken();
-            Assert.True(token.TokenType == TokenType.LeftParens);
+            Assert.True(token.Kind == TokenType.LeftParens);
             Assert.Equal(input, token.Text);
         }
 
@@ -152,7 +152,7 @@ namespace Minsk.Tests
             const string input = ")";
             var lexer = new Lexer(input);
             var token = lexer.NextToken();
-            Assert.True(token.TokenType == TokenType.RightParens);
+            Assert.True(token.Kind == TokenType.RightParens);
             Assert.Equal(input, token.Text);
         }
 
@@ -163,50 +163,50 @@ namespace Minsk.Tests
             var lexer = new Lexer(input);
 
             var token = lexer.NextToken();
-            Assert.True(token.TokenType == TokenType.LeftParens);
+            Assert.True(token.Kind == TokenType.LeftParens);
 
             token = lexer.NextToken();
-            Assert.True(token.TokenType == TokenType.Integer);
+            Assert.True(token.Kind == TokenType.Integer);
             Assert.Equal(1, token.Value);
 
             token = lexer.NextToken();
-            Assert.True(token.TokenType == TokenType.Whitespace);
+            Assert.True(token.Kind == TokenType.Whitespace);
             Assert.Equal(" ", token.Text);
 
             token = lexer.NextToken();
-            Assert.True(token.TokenType == TokenType.Plus);
+            Assert.True(token.Kind == TokenType.Plus);
 
             token = lexer.NextToken();
-            Assert.True(token.TokenType == TokenType.Whitespace);
+            Assert.True(token.Kind == TokenType.Whitespace);
             Assert.Equal(" ", token.Text);
 
             token = lexer.NextToken();
-            Assert.True(token.TokenType == TokenType.Integer);
+            Assert.True(token.Kind == TokenType.Integer);
             Assert.Equal(2, token.Value);
 
             token = lexer.NextToken();
-            Assert.True(token.TokenType == TokenType.RightParens);
+            Assert.True(token.Kind == TokenType.RightParens);
 
             token = lexer.NextToken();
-            Assert.True(token.TokenType == TokenType.Whitespace);
+            Assert.True(token.Kind == TokenType.Whitespace);
             Assert.Equal(" ", token.Text);
 
             token = lexer.NextToken();
-            Assert.True(token.TokenType == TokenType.Star);
+            Assert.True(token.Kind == TokenType.Star);
 
             token = lexer.NextToken();
-            Assert.True(token.TokenType == TokenType.Whitespace);
+            Assert.True(token.Kind == TokenType.Whitespace);
             Assert.Equal(" ", token.Text);
 
             token = lexer.NextToken();
-            Assert.True(token.TokenType == TokenType.Integer);
+            Assert.True(token.Kind == TokenType.Integer);
             Assert.Equal(99, token.Value);
 
             token = lexer.NextToken();
-            Assert.True(token.TokenType == TokenType.Slash);
+            Assert.True(token.Kind == TokenType.Slash);
 
             token = lexer.NextToken();
-            Assert.True(token.TokenType == TokenType.Integer);
+            Assert.True(token.Kind == TokenType.Integer);
             Assert.Equal(3, token.Value);
         }
     }

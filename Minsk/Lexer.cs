@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Minsk
 {
@@ -6,8 +7,11 @@ namespace Minsk
     {
         readonly string _text;
         int _position = 0;
+        private List<string> _diagnostics = new List<string>();
 
         public Lexer(string text) => _text = text;
+
+        public IEnumerable<string> Diagnostics => _diagnostics;
 
         private char Current => _position < _text.Length ? _text[_position] : '\0';
 
@@ -76,6 +80,7 @@ namespace Minsk
             }
             else
             {
+                _diagnostics.Add($"Invalid token. Can't convert {text} to a number.");
                 return new Token(TokenType.BadToken, start, text, null);
             }
 

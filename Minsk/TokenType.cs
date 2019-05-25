@@ -16,6 +16,10 @@ namespace Minsk
         EOF,
         Identifier,
         Integer,
-        Double
+        Double,
+
+        NumberExpression,
+        BinaryExpression,
+        ParenthesizedExpression
     }
 }
