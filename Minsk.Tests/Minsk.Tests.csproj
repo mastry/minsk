@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <LanguageVersion>preview</LanguageVersion>
+    <LangVersion>8.0</LangVersion>
     <NullableContextOptions>enable</NullableContextOptions>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
